@@ -8,7 +8,6 @@
 
 #include "path_manager.h"
 
-
 using namespace std;
 
 class Archiver
