@@ -1,10 +1,4 @@
 #pragma once
-#include <string>
-#include <vector>
-#include <map>
-#include <filesystem>
-
-using namespace std;
 
 class PathManager
 {
@@ -77,7 +71,6 @@ private:
 		{{209, 142}, 'þ'},
 		{{209, 143}, 'ÿ'},
 	};
-
 	string path;
 	filesystem::path repaired_path;
 	
@@ -189,8 +182,8 @@ public:
 		return string(path_u8.begin(), path_u8.end());
 	}
 	
-	void setPath(filesystem::path path_value)
+	void setPath(filesystem::path path)
 	{
-		path = path_value.string();
+		this->path = path.string();
 	}
 };

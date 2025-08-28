@@ -1,36 +1,27 @@
 #include <iostream>
 #include <string>
+#include <vector>
+#include <map>
+#include <algorithm>
 #include <fstream>
-
-#include "archiver.h"
+#include <filesystem>
+#include <Windows.h>
+#include <ShlObj.h>
+#include <zip.h>
 
 using namespace std;
+
+#include "file_folder_manager.h"
+#include "settings_manager.h"
+#include "path_manager.h"
+#include "archiver.h"
 
 int main()
 {
 	setlocale(LC_ALL, "Russian");
 
-	streambuf* console_input = cin.rdbuf();
-	ifstream file_input("pack.txt");
-	cin.rdbuf(file_input.rdbuf());
-
-	string operation, archive_path;
-	cin >> operation >> archive_path;
-
-	if (operation == "PACK")
-	{
-		vector <string> archive_files;
-		string archive_file;
-		while (cin >> archive_file)
-			archive_files.push_back(archive_file);
-
-		Archiver archiver(archive_path, archive_files);
-	}
-	else if (operation == "UNPACK")
-		Archiver archiver(archive_path);
-	
-	cin.rdbuf(console_input);
-	file_input.close();
+	SettingsManager settings_manager;
+	settings_manager.writeSetting("EnableContextMenuCommands", "True");
 
 	return 0;
 }

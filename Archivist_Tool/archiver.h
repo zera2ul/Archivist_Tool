@@ -1,14 +1,4 @@
 #pragma once
-#include <string>
-#include <vector>
-#include <algorithm>
-#include <fstream>
-#include <filesystem>
-#include <zip.h>
-
-#include "path_manager.h"
-
-using namespace std;
 
 class Archiver
 {
@@ -17,18 +7,10 @@ private:
 	vector <filesystem::path> base_entries;
 	filesystem::path base_path;
 
-	void createParentDirectories(filesystem::path absolute_path)
-	{
-		absolute_path = absolute_path.parent_path();
-		if (!filesystem::exists(absolute_path))
-			filesystem::create_directories(absolute_path);
-	}
-
-	
-
 	void unpackFile(filesystem::path absolute_path, zip_int64_t index)
 	{
-		createParentDirectories(absolute_path);
+		FileFolderManager file_folder_manager;
+		file_folder_manager.createParentDirectories(absolute_path);
 		ofstream output_file(absolute_path, ios::binary);
 
 		zip_file_t* archive_file = zip_fopen_index(archive, index, 0);
