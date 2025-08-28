@@ -94,3 +94,7 @@ build/
 *.rar
 
 vcpkg_installed/
+*.txt
+*.sln
+*.vcxproj
+*.vcxproj.filters
