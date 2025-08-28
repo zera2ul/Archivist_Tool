@@ -9,7 +9,7 @@ using namespace std;
 class PathManager
 {
 private:
-	map <pair <int, int>, char> utf8_characters = {
+	map <pair <int, int>, char> utf8_cyrillic_characters = {
 		{{208, 144}, 'À'},
 		{{208, 145}, 'Á'},
 		{{208, 146}, 'Â'},
@@ -78,122 +78,119 @@ private:
 		{{209, 143}, 'ÿ'},
 	};
 
-	string path, path_part, repaired_path_part;
+	string path;
 	filesystem::path repaired_path;
-	int current_index, separator_index;
 	
-	u8string getUtf8PathPart()
+	u8string getUtf8PathPart(string path_part)
 	{
 		u8string utf8_path;
 		for (int i = 0; i < path_part.size(); i++)
-		{
 			utf8_path.push_back(path_part[i]);
-		}
 
 		return utf8_path;
 	}
 
-	vector <int> getUtf8CharactersCodes()
+	vector <int> getUtf8CharactersCodes(string path_part)
 	{
 		vector <int> utf8_codes;
-		for (char8_t character : getUtf8PathPart())
-		{
+		for (char8_t character : getUtf8PathPart(path_part))
 			utf8_codes.push_back(character);
-		}
 
 		return utf8_codes;
 	}
 
-	bool isPathPartCyrillic()
+	string asCyrillic(string path_part)
 	{
-		vector <int> utf8_characters_codes = getUtf8CharactersCodes();
-
+		vector <int> utf8_characters_codes = getUtf8CharactersCodes(path_part);		
 		if (utf8_characters_codes.size() % 2 == 1)
-		{
-			return false;
-		}
+			return "";
 
+		string repaired_path_part;
 		for (int index = 0; index < utf8_characters_codes.size(); index += 2)
 		{
 			pair <int, int> utf8_character_codes = { utf8_characters_codes[index], utf8_characters_codes[index + 1] };
-			if (utf8_characters.find(utf8_character_codes) == utf8_characters.end())
-			{
-				return false;
-			}
-			else
-			{
-				repaired_path_part.push_back(utf8_characters[utf8_character_codes]);
-			}
+			if (utf8_cyrillic_characters.find(utf8_character_codes) == utf8_cyrillic_characters.end())
+				return "";
+			
+			repaired_path_part.push_back(utf8_cyrillic_characters[utf8_character_codes]);
 		}
 
+		return repaired_path_part;
 	}
 
-	bool isPathPartAscii()
+	string asAscii(string path_part)
 	{
 		for (auto chr : path_part)
-		{
-			if (isascii(chr))
-			{
-				continue;
-			}
+			if (!isascii(chr))
+				return "";
 
-			return false;
-		}
-
-		return true;
+		return path_part;
 	}
 
-	string getRepairedPathPart()
+	string getRepairedPathPart(string path_part)
 	{
-		if (isPathPartAscii())
-			return path_part;
-		else if (isPathPartCyrillic())
-			return repaired_path_part;
-		else
-			return "";
-	}
-
-	void repairPathPart()
-	{
-		path_part = path.substr(current_index, separator_index - current_index);
-
-		repaired_path_part = getRepairedPathPart();
+		string repaired_path_part = asAscii(path_part);
 		if (repaired_path_part != "")
-		{
+			return path_part;
+
+		repaired_path_part = asCyrillic(path_part);
+		if (repaired_path_part != "")
+			return repaired_path_part;
+
+		return "";
+	}
+
+	void repairPathPart(int current_index, int separator_index)
+	{
+		string path_part = path.substr(current_index, separator_index - current_index);
+
+		string repaired_path_part = getRepairedPathPart(path_part);
+		if (repaired_path_part != "")
 			if (repaired_path == "")
 				repaired_path = repaired_path_part;
 			else
 				repaired_path = repaired_path.string() + "\\" + repaired_path_part;
-
-			repaired_path_part = "";
-		}
 		else
 			repaired_path = "";
 	}
 public:
 	filesystem::path getRepairedPath()
 	{
+		int current_index = 0;
 		while (true)
 		{
-			separator_index = path.find('\\', current_index);
+			int separator_index = path.find('\\', current_index);
 			if (separator_index != -1)
 			{
-				repairPathPart();
+				repairPathPart(current_index, separator_index);
 				if (repaired_path == "")
 					return "";
 
 				current_index = separator_index + 1;
-				continue;
 			}
-			
-			separator_index = path.find('.', current_index);
-			repairPathPart();
-			repaired_path += path.substr(separator_index);
+			else
+			{
+				separator_index = path.find('.', current_index);
+				repairPathPart(current_index, separator_index);
+				if (repaired_path == "")
+					return "";
 
-			return repaired_path;
+				repaired_path += path.substr(separator_index);
+
+				return repaired_path;
+			}
 		}
 	}
 
-	PathManager(filesystem::path path) : path(path.string()), path_part(""), repaired_path_part(""),
-		repaired_path(""), current_index(0), separator_index(-1) {}
+	string getUtf8Path()
+	{
+		u8string path_u8 = filesystem::path(path).u8string();
+
+		return string(path_u8.begin(), path_u8.end());
+	}
+	
+	void setPath(filesystem::path path_value)
+	{
+		path = path_value.string();
+	}
 };

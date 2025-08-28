@@ -22,16 +22,12 @@ int main()
 		vector <string> archive_files;
 		string archive_file;
 		while (cin >> archive_file)
-		{
 			archive_files.push_back(archive_file);
-		}
 
 		Archiver archiver(archive_path, archive_files);
 	}
 	else if (operation == "UNPACK")
-	{
 		Archiver archiver(archive_path);
-	}
 	
 	cin.rdbuf(console_input);
 	file_input.close();

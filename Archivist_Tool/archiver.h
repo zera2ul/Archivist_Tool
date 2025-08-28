@@ -21,16 +21,10 @@ private:
 	{
 		absolute_path = absolute_path.parent_path();
 		if (!filesystem::exists(absolute_path))
-		{
 			filesystem::create_directories(absolute_path);
-		}
 	}
 
-	string getPathU8(filesystem::path path)
-	{
-		u8string path_u8 = path.u8string();
-		return string(path_u8.begin(), path_u8.end());
-	}
+	
 
 	void unpackFile(filesystem::path absolute_path, zip_int64_t index)
 	{
@@ -41,9 +35,7 @@ private:
 		char buffer[4096];
 		zip_int64_t bytes_count;
 		while (bytes_count = zip_fread(archive_file, buffer, sizeof(buffer)))
-		{
 			output_file.write(buffer, bytes_count);
-		}
 
 		output_file.close();
 		zip_fclose(archive_file);
@@ -57,20 +49,23 @@ private:
 			zip_stat_t stat;
 			zip_stat_index(archive, index, ZIP_FL_ENC_UTF_8, &stat);
 
-			PathManager path_manager(base_path / filesystem::path(stat.name));
+			PathManager path_manager;
+			path_manager.setPath(base_path / filesystem::path(stat.name));
 			filesystem::path repaired_path = path_manager.getRepairedPath();
 			
 			if (repaired_path != "")
-			{
 				unpackFile(repaired_path, index);
-			}
 		}
 	}
 
 	void packFile(filesystem::path absolute_path, filesystem::path relative_path)
 	{
-		zip_source_t* source = zip_source_file(archive, getPathU8(absolute_path).c_str(), 0, 0);
-		zip_file_add(archive, getPathU8(relative_path).c_str(), source, ZIP_FL_ENC_UTF_8);
+		PathManager path_manager;
+		path_manager.setPath(absolute_path);
+		zip_source_t* source = zip_source_file(archive, path_manager.getUtf8Path().c_str(), 0, 0);
+
+		path_manager.setPath(relative_path);
+		zip_file_add(archive, path_manager.getUtf8Path().c_str(), source, ZIP_FL_ENC_UTF_8);
 	}
 
 	bool isFile(filesystem::path entry)
@@ -98,13 +93,9 @@ private:
 		for (auto& [absolute_path, relative_path]: sub_entries)
 		{
 			if (isFile(relative_path))
-			{
 				packFile(absolute_path, relative_path);
-			}
 			else
-			{
 				zip_dir_add(archive, relative_path.string().c_str(), ZIP_FL_ENC_UTF_8);
-			}
 		}
 	}
 
@@ -113,13 +104,9 @@ private:
 		for (filesystem::path& base_entry : base_entries)
 		{
 			if (isFile(base_entry))
-			{
 				packFile(base_entry, base_entry.filename());
-			}
 			else
-			{
 				packDirectory(base_entry);
-			}
 		}
 	}
 
@@ -127,9 +114,7 @@ private:
 	{
 		vector <filesystem::path> entries_paths;
 		for (auto& entry : entries)
-		{
 			entries_paths.emplace_back(filesystem::path(entry));
-		}
 
 		return entries_paths;
 	}
