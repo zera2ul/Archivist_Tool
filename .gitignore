@@ -11,6 +11,12 @@
 *.gch
 *.pch
 
+# Linker files
+*.ilk
+
+# Debugger Files
+*.pdb
+
 # Compiled Dynamic libraries
 *.so
 *.dylib
@@ -30,3 +36,61 @@
 *.exe
 *.out
 *.app
+
+# debug information files
+*.dwo
+
+# Visual Studio
+.vs/
+*.suo
+*.user
+*.ncb
+*.aps
+*.pdb
+*.tlb
+*.tlh
+*.tli
+*.tmp
+*.log
+*.bak
+*.sbr
+*.bsc
+*.res
+*.exp
+*.map
+*.idb
+*.ipch
+_UpgradeReport_Files/
+Backup/
+ipch/
+obj/
+Debug/
+Release/
+x64/
+Win32/
+ARM/
+ARM64/
+
+# NuGet
+packages/
+*.nupkg
+
+# CMake
+CMakeLists.txt.user
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+install/
+build/
+
+# Other common files
+*.sdf
+*.opensdf
+*.VC.db
+*.VC.VC.opendb
+*.db
+*.cache
+*.zip
+*.rar
+
+vcpkg_installed/
