@@ -10,7 +10,7 @@
 #include <zip.h>
 #include <FL/Fl.H>
 #include <FL/Fl_Window.H>
-#include <FL/Fl_PNG_Image.H>
+#include <FL/x.H>
 #include <FL/Fl_Check_Button.H>
 
 using namespace std;

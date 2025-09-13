@@ -34,6 +34,7 @@ public:
 	{
 		int x_position = Fl::w() / 2  - width / 2, y_position = Fl::h() / 2 - height / 2;
 		window = new Fl_Window(x_position, y_position, width, height, "Archivist Tool");
+		window->icon((char*)(LoadImage(fl_display, L"icon.ico", IMAGE_ICON, 0, 0, LR_LOADFROMFILE)));
 
 		setupEnableContextMenuCommandsCheckbox();
 
