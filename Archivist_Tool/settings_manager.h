@@ -18,6 +18,23 @@ private:
 		return filesystem::path(path) / APP_NAME;
 	}
 public:
+	string readSetting(string name)
+	{
+		streambuf* console_input = cin.rdbuf();
+		ifstream settings_file(settings_path);
+		cin.rdbuf(settings_file.rdbuf());
+
+		string setting;
+		while (getline(cin, setting))
+		{
+
+			if (setting.find(name) != -1)
+				return setting.substr(setting.find(":") + 1);
+		}
+
+		cin.rdbuf(console_input);
+		settings_file.close();
+	}
 	void writeSetting(string name, string value)
 	{
 		FileFolderManager file_folder_manager;
