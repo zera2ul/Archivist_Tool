@@ -5,8 +5,6 @@ const int PATH_MAX_LENGTH = 260;
 class SettingsManager
 {
 private:
-	const string APP_NAME = "Archivist_Tool", SETTINGS_FILE_NAME = "settings.txt";
-
 	filesystem::path settings_path;
 
 	filesystem::path getAppDataPath()
@@ -15,7 +13,7 @@ private:
 
 		SHGetFolderPathA(NULL, CSIDL_APPDATA, NULL, 0, path);
 
-		return filesystem::path(path) / APP_NAME;
+		return filesystem::path(path) / "Archivist_Tool";
 	}
 public:
 	string readSetting(string name)
@@ -47,6 +45,6 @@ public:
 
 	SettingsManager()
 	{
-		settings_path = getAppDataPath() / SETTINGS_FILE_NAME;
+		settings_path = getAppDataPath() / "settings.txt";
 	}
 };

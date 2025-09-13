@@ -33,7 +33,7 @@ public:
 	App()
 	{
 		int x_position = Fl::w() / 2  - width / 2, y_position = Fl::h() / 2 - height / 2;
-		window = new Fl_Window(x_position, y_position, width, height);
+		window = new Fl_Window(x_position, y_position, width, height, "Archivist Tool");
 
 		setupEnableContextMenuCommandsCheckbox();
 
