@@ -8,6 +8,9 @@
 #include <Windows.h>
 #include <ShlObj.h>
 #include <zip.h>
+#include <FL/Fl.H>
+#include <FL/Fl_Window.H>
+#include <FL/Fl_Box.H>
 
 using namespace std;
 
@@ -23,5 +26,14 @@ int main()
 	SettingsManager settings_manager;
 	settings_manager.writeSetting("EnableContextMenuCommands", "True");
 
-	return 0;
+	Fl_Window* window = new Fl_Window(340, 180);
+
+	Fl_Box* box = new Fl_Box(20, 40, 300, 100, "Archivist Tool");
+	box->box(FL_UP_BOX);
+
+	window->end();
+
+	window->show();
+
+	return Fl::run();
 }

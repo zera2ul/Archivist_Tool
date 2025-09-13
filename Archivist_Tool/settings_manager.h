@@ -5,7 +5,7 @@ const int PATH_MAX_LENGTH = 260;
 class SettingsManager
 {
 private:
-	const string APP_NAME = "Archivist Tool", SETTINGS_FILE_NAME = "settings.txt";
+	const string APP_NAME = "Archivist_Tool", SETTINGS_FILE_NAME = "settings.txt";
 
 	filesystem::path settings_path;
 
