@@ -4,37 +4,46 @@ class App
 private:
 	const int width = 512, height = 512;
 	Fl_Window* window;
+	Fl_Check_Button* enable_context_menu_commands_checkbox;
 
-	void setupEnableContextMenuCommandsCheckbox()
+	void setupEnableContextMenuCommandsCheckboxCallback()
 	{
-		Fl_Check_Button* context_menu_commands_checkbox = new Fl_Check_Button(0, 0, width, height, "Enable context menu commands");
-		
-		SettingsManager settings_manager;
-		string enable_context_menu_commands_value = settings_manager.readSetting("EnableContextMenuCommands");
-		if (enable_context_menu_commands_value == "True")
-			context_menu_commands_checkbox->value(1);
-
-		context_menu_commands_checkbox->callback([](Fl_Widget* widget, void* data) {
-			Fl_Check_Button* context_menu_commands_checkbox = (Fl_Check_Button*)(widget);
+		enable_context_menu_commands_checkbox->callback([](Fl_Widget* widget, void* data) {
+			Fl_Check_Button* enable_context_menu_commands_checkbox = (Fl_Check_Button*)(widget);
 			SettingsManager settings_manager;
 
-			if (context_menu_commands_checkbox->value())
+			if (enable_context_menu_commands_checkbox->value())
 				settings_manager.writeSetting("EnableContextMenuCommands", "True");
 			else
 				settings_manager.writeSetting("EnableContextMenuCommands", "False");
 			});
+	}
 
-		context_menu_commands_checkbox->align(FL_ALIGN_CENTER | FL_ALIGN_INSIDE);
-		context_menu_commands_checkbox->labelsize(32);
+	void setupEnableContextMenuCommandsCheckbox()
+	{
+		enable_context_menu_commands_checkbox = new Fl_Check_Button(0, 0, width, height, "Enable context menu commands");
 		
-		context_menu_commands_checkbox->show();
+		SettingsManager settings_manager;
+		string enable_context_menu_commands_value = settings_manager.readSetting("EnableContextMenuCommands");
+		if (enable_context_menu_commands_value == "True")
+			enable_context_menu_commands_checkbox->value(1);
+
+		setupEnableContextMenuCommandsCheckboxCallback();
+
+		enable_context_menu_commands_checkbox->align(FL_ALIGN_CENTER | FL_ALIGN_INSIDE);
+		enable_context_menu_commands_checkbox->labelsize(32);
+		enable_context_menu_commands_checkbox->selection_color(FL_BLUE);
+		enable_context_menu_commands_checkbox->labelcolor(FL_BLUE);
+		
+		enable_context_menu_commands_checkbox->show();
 	}
 public:
 	App()
 	{
-		int x_position = Fl::w() / 2  - width / 2, y_position = Fl::h() / 2 - height / 2;
+		int x_position = (Fl::w() - width) / 2, y_position = (Fl::h() - height) / 2;
 		window = new Fl_Window(x_position, y_position, width, height, "Archivist Tool");
-		window->icon((char*)(LoadImage(fl_display, L"icon.ico", IMAGE_ICON, 0, 0, LR_LOADFROMFILE)));
+		window->icon(LoadImage(fl_display, L"icon.ico", IMAGE_ICON, 0, 0, LR_LOADFROMFILE));
+		window->color(FL_BLACK);
 
 		setupEnableContextMenuCommandsCheckbox();
 
