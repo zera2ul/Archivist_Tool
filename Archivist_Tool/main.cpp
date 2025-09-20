@@ -12,6 +12,7 @@
 #include <FL/Fl_Window.H>
 #include <FL/x.H>
 #include <FL/Fl_Check_Button.H>
+#include <shellapi.h>
 
 using namespace std;
 

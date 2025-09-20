@@ -1,12 +1,12 @@
 #pragma once
 
-const string archive_path = "C:\\Utils\\archive.zip";
+const string archive_path = "C:\\Archivist_Tool\\archive.zip";
+const LPCWSTR register_path = L"C:\\Archivist_Tool\\register.reg", unregister_path = L"C:\\Archivist_Tool\\unregister.reg";
 
 class App
 {
 private:
 	const int width = 512, height = 512;
-	
 	Fl_Window* window;
 	Fl_Check_Button* enable_context_menu_commands_checkbox;
 	Fl_Button* pack_archive_button;
@@ -45,9 +45,15 @@ private:
 			FileFolderManager file_folder_manager;
 
 			if (enable_context_menu_commands_checkbox->value())
+			{
+				ShellExecute(NULL, L"open", register_path, NULL, NULL, SW_SHOWNORMAL);
 				file_folder_manager.writeSetting("EnableContextMenuCommands", "True");
+			}
 			else
+			{
+				ShellExecute(NULL, L"open", unregister_path, NULL, NULL, SW_SHOWNORMAL);
 				file_folder_manager.writeSetting("EnableContextMenuCommands", "False");
+			}
 			});
 	}
 
