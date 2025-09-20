@@ -17,7 +17,7 @@ private:
 		char buffer[4096];
 		zip_int64_t bytes_count;
 		while (bytes_count = zip_fread(archive_file, buffer, sizeof(buffer)))
-			output_file.write(buffer, bytes_count);
+			output_file << buffer;
 
 		output_file.close();
 		zip_fclose(archive_file);

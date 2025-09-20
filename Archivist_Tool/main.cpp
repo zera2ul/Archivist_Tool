@@ -16,17 +16,21 @@
 using namespace std;
 
 #include "file_folder_manager.h"
-#include "settings_manager.h"
 #include "path_manager.h"
 #include "archiver.h"
 #include "app.h"
 
-int main()
+int main(int argc, char* argv[])
 {
-	setlocale(LC_ALL, "Russian");
-
-	App app;
-	app.run();
-
-	return 0;
+	if (argc == 1)
+	{
+		App app;
+		return app.run();
+	}
+	else if (argc == 2)
+	{
+		FileFolderManager file_folder_manager;
+		file_folder_manager.writePath(argv[1]);
+		return 0;
+	}
 }
