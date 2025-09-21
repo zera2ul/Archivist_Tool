@@ -94,7 +94,10 @@ private:
 
 	string asCyrillic(string path_part)
 	{
-		vector <int> utf8_characters_codes = getUtf8CharactersCodes(path_part);		
+		vector <int> utf8_characters_codes = getUtf8CharactersCodes(path_part);
+
+		/// space - 32 underline - 95
+
 		if (utf8_characters_codes.size() % 2 == 1)
 			return "";
 

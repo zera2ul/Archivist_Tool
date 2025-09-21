@@ -55,15 +55,15 @@ private:
 		return entry.string().find('.') != -1;
 	}
 
-	vector <pair <filesystem::path, filesystem::path>> collectSubEntries(filesystem::path absolute_path)
+	vector <pair <filesystem::path, filesystem::path>> collectSubEntries(filesystem::path directory_absolute_path)
 	{
 		vector < pair <filesystem::path, filesystem::path>> entries;
-		for (auto& entry : filesystem::recursive_directory_iterator(absolute_path))
+		for (auto& entry : filesystem::recursive_directory_iterator(directory_absolute_path))
 		{
-			filesystem::path absolute_path = entry.path();
-			filesystem::path relative_path = filesystem::relative(absolute_path, base_path);
+			filesystem::path entry_absolute_path = entry.path();
+			filesystem::path relative_path = filesystem::relative(entry_absolute_path, directory_absolute_path.parent_path());
 
-			entries.emplace_back(absolute_path, relative_path);
+			entries.emplace_back(entry_absolute_path, relative_path);
 		}
 
 		return entries;
@@ -109,7 +109,6 @@ public:
 	}
 
 	Archiver(string archive_path, vector <string> base_entries) :
-		base_path(filesystem::path(archive_path).parent_path()),
 		base_entries(strings_to_paths(base_entries))
 	{
 		archive = zip_open(archive_path.c_str(), ZIP_CREATE | ZIP_TRUNCATE, nullptr);
