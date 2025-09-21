@@ -69,7 +69,11 @@ private:
 		{{209, 140}, 'ü'},
 		{{209, 141}, 'ı'},
 		{{209, 142}, 'ş'},
-		{{209, 143}, 'ÿ'},
+		{{209, 143}, 'ÿ'}
+	};
+	map <int, char> utf8_special_characters = {
+		{32, ' '},
+		{95, '_'}
 	};
 	string path;
 	filesystem::path repaired_path;
@@ -92,23 +96,27 @@ private:
 		return utf8_codes;
 	}
 
-	string asCyrillic(string path_part)
+	string asCyrillicWithSpecialCharacters(string path_part)
 	{
 		vector <int> utf8_characters_codes = getUtf8CharactersCodes(path_part);
 
-		/// space - 32 underline - 95
-
-		if (utf8_characters_codes.size() % 2 == 1)
-			return "";
-
 		string repaired_path_part;
-		for (int index = 0; index < utf8_characters_codes.size(); index += 2)
+		int index = 0;
+		while (index < utf8_characters_codes.size())
 		{
+			if (utf8_special_characters.find(utf8_characters_codes[index]) != utf8_special_characters.end())
+			{
+				repaired_path_part.push_back(utf8_special_characters[utf8_characters_codes[index]]);
+				index++;
+				continue;
+			}
+
 			pair <int, int> utf8_character_codes = { utf8_characters_codes[index], utf8_characters_codes[index + 1] };
 			if (utf8_cyrillic_characters.find(utf8_character_codes) == utf8_cyrillic_characters.end())
 				return "";
 			
 			repaired_path_part.push_back(utf8_cyrillic_characters[utf8_character_codes]);
+			index += 2;
 		}
 
 		return repaired_path_part;
@@ -129,7 +137,7 @@ private:
 		if (repaired_path_part != "")
 			return path_part;
 
-		repaired_path_part = asCyrillic(path_part);
+		repaired_path_part = asCyrillicWithSpecialCharacters(path_part);
 		if (repaired_path_part != "")
 			return repaired_path_part;
 
