@@ -6,7 +6,7 @@ Windows Registry Editor Version 5.00
 "Icon"="C:\\Archivist_Tool\\icon.ico"
 
 [HKEY_CLASSES_ROOT\*\shell\ArchivistToolAddToArchive\command]
-@="\"C:\\Archivist_Tool\\archivist_tool.exe\" \"%1\""
+@="\"C:\\Archivist_Tool\\archivist_tool.exe\" \"pack\" \"%1\""
 
 [HKEY_CLASSES_ROOT\Directory\shell\ArchivistToolAddToArchive]
 @="Add to archive"
@@ -14,4 +14,12 @@ Windows Registry Editor Version 5.00
 "Icon"="C:\\Archivist_Tool\\icon.ico"
 
 [HKEY_CLASSES_ROOT\Directory\shell\ArchivistToolAddToArchive\command]
-@="\"C:\\Utils\\archivist_tool.exe\" \"%1\""
+@="\"C:\\Archivist_Tool\\archivist_tool.exe\" \"pack\" \"%1\""
+
+[HKEY_CLASSES_ROOT\SystemFileAssociations\.zip\shell\ArchivistToolUnpackArchive]
+@="Unpack archive"
+"MultiSelectModel"="Single"
+"Icon"="C:\\Archivist_Tool\\icon.ico"
+
+[HKEY_CLASSES_ROOT\SystemFileAssociations\.zip\shell\ArchivistToolUnpackArchive\command]
+@="\"C:\\Archivist_Tool\\archivist_tool.exe\" \"unpack\" \"%1\""
