@@ -1,8 +1,8 @@
 # Archivist Tool
-Simple program for packing and unpacking zip archives.
+A simple program for packing and unpacking ZIP archives.
 
-Folder with program should be place on "C:".
+The program folder must be located on the "C:" drive.
 
-Program will edit registry for turn on / off context menu commands.
+The program will edit the registry to enable/disable context menu commands.
 
-Program work with ASCII or cyrillic with spaces and underscores paths.
+The program works with ASCII and Cyrillic characters, including paths with spaces and underscores.
